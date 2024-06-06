@@ -14,17 +14,7 @@ For further information please visit:
 - [Project page](https://xjiangan.github.io/glace)
 - [Arxiv]
 
-Table of contents:
 
-- [Installation](#installation)
-- [Dataset Setup](#datasets)
-- [Usage](#usage)
-    - [ACE Training](#ace-training)
-    - [ACE Evaluation](#ace-evaluation)
-    - [Training Scripts](#complete-training-and-evaluation-scripts)
-    - [Pretrained GLACE Networks](#pretrained-ace-networks)
-    - [Note on the Encoder Training](#encoder-training)
-- [References](#publications)
 
 ## Installation
 
