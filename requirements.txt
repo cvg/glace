@@ -1,0 +1,9 @@
+torch
+torchvision
+opencv-python
+scikit-image
+scikit-learn
+timm
+matplotlib
+trimesh
+pyrender
