@@ -12,7 +12,7 @@ This repository contains the code associated to the GLACE paper:
 For further information please visit:
 
 - [Project page](https://xjiangan.github.io/glace)
-- [Arxiv]
+- [Arxiv](https://arxiv.org/abs/2406.04340)
 
 
 
