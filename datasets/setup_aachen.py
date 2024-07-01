@@ -62,7 +62,11 @@ def dl_file(urls, file):
 	for url in urls:
 		print(f"Try downloading to {file} from {url}")
 		if "drive.google.com" in url:
-			gdown.download(url, file, quiet=False)
+			try:
+				gdown.download(url, file, quiet=False)
+			except gdown.exceptions.FileURLRetrievalError as e:
+				print(f"Failed to download {file}: {e}")
+				continue
 		else:
 			urlretrieve(url, file)
 		if os.path.isfile(file):
