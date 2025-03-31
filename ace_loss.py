@@ -1,12 +1,32 @@
 # Copyright © Niantic, Inc. 2022.
 
+import math
+
 import numpy as np
 import torch
 
 
-def weighted_tanh(repro_errs, weight):
-    return weight * torch.tanh(repro_errs / weight).sum()
+def weighted_tanh(repro_errs, weight,reduction="mean"):
+    loss = weight * torch.tanh(repro_errs / weight)
+    if reduction == "sum":
+        return loss.sum()
+    elif reduction == "mean":
+        return loss.mean()
+    else:
+        raise ValueError(f"Unknown reduction type: {reduction}")
 
+def get_schedule_weight(iteration, total_iterations, schedule):
+    if schedule == "constant":
+        return 1
+    schedule_weight = iteration / total_iterations
+    schedule_weight = min(schedule_weight, 1)
+    if schedule == "linear":
+        return schedule_weight
+    if schedule == "circle":
+        return  1 - math.sqrt(1 - schedule_weight ** 2)
+    if schedule == "cosine":
+        return (1 + math.cos(math.pi * schedule_weight)) / 2
+    raise ValueError(f"Unknown schedule type: {schedule}")
 
 class ReproLoss:
     """
@@ -41,7 +61,7 @@ class ReproLoss:
             return 0
 
         if self.type == "tanh":
-            return weighted_tanh(repro_errs_b1N, self.soft_clamp)
+            return weighted_tanh(repro_errs_b1N, self.soft_clamp, reduction="sum")
 
         elif self.type == "dyntanh":
             # Compute the progress over the training process.
@@ -55,7 +75,7 @@ class ReproLoss:
             loss_weight = (1 - schedule_weight) * self.soft_clamp + self.soft_clamp_min
 
             # Compute actual loss.
-            return weighted_tanh(repro_errs_b1N, loss_weight)
+            return weighted_tanh(repro_errs_b1N, loss_weight, reduction="sum")
 
         elif self.type == "l1":
             # L1 loss on all pixels with small-enough error.
